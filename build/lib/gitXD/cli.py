@@ -1,9 +1,6 @@
 import argparse
-def factorial(n):
-    if n == 0:
-        return 1
-    else:
-        return n * factorial(n - 1)
+import os
+from . import data
 
 # Calculate factorial of 5
 
@@ -22,4 +19,5 @@ def parse_args():
     return parser.parse_args ()
 
 def init (args):
-    print("Hello, world!")
+    data.init()
+    print (f'Initialized empty gitXD repository in {os.getcwd()}/{data.GIT_DIR}')
