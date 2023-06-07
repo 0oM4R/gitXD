@@ -1,4 +1,4 @@
-# Step 1
+# Step 1,2
 ```python
 import argparse
 
@@ -42,6 +42,6 @@ Finally, the parse_args() function returns the parsed command-line arguments.
 Back to main function, The line args.func(args) is responsible for executing the appropriate function based on the command provided by the user.
 The init() function is defined to handle the "init" command. In this case, it simply prints the message "hello world".gi
 
-## Step 2 
+## Step 3
 __Adding .xD directory__
 Git stores all repository data locally, in a subdirectory called ".git", so upon initialization we'll create one; using os, will name it `.xD`
