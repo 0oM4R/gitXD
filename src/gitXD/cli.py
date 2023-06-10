@@ -26,8 +26,8 @@ def parse_args():
 
     return parser.parse_args ()
 def write_tree(args):
-    base.write_tree()
-    
+    print(base.write_tree())
+
 def hash_object(args):
     with open (args.file, 'rb') as f:
         print (data.hash_object (f.read()))
