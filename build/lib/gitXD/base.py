@@ -41,9 +41,22 @@ def get_tree(oid, base_path=''):
             result.update(get_tree(oid, f'{path}/'))
         else:
             assert False, f'Unknown tree entry {type_}'
-
     return result
+def _empty_current_directory():
+    for root, dirnames, filenames in os.walk('.',topdown=False):
+        for filename in filenames:
+            path = os.path.relpath(f'{root}/{filename}')
+            if is_ignored(path) or not os.path.isfile: continue
+            os.remove(path)
+        for dirname in dirnames:
+            path = os.path.relpath(f'{root}/{dirname}')
+            if is_ignored(path):  continue
+            try:
+                os.rmdir(path)
+            except (FileNotFoundError, OSError):
+                pass
 def reed_tree(tree_oid):
+    _empty_current_directory()
     for path, oid in get_tree(tree_oid,'./').items():
         os.makedirs (os.path.dirname(path),exist_ok=True)
         with open (path,'wb') as f:
