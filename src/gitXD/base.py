@@ -18,8 +18,6 @@ def write_tree(directory ='.'):
             entries.append((entry.name, oid, type_))
     tree = ''.join(f'{type_} {oid} {name}\n'
                    for name, oid, type_ in sorted(entries))
-    print('string is tree and it is:')
-    print(tree)
     return data.hash_object(tree.encode(),'tree' )
 def is_ignored (path):
     return data.GIT_DIR in path.split('/') or '.git' in path.split('/')

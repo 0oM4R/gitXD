@@ -18,8 +18,6 @@ def write_tree(directory ='.'):
             entries.append((entry.name, oid, type_))
     tree = ''.join(f'{type_} {oid} {name}\n'
                    for name, oid, type_ in sorted(entries))
-    print('string is tree and it is:')
-    print(tree)
     return data.hash_object(tree.encode(),'tree' )
 
 def _iter_tree_entries (oid):
@@ -62,5 +60,8 @@ def reed_tree(tree_oid):
         with open (path,'wb') as f:
             f.write(data.get_object(oid))
             
+def commit(message):
+    commit = f'tree {write_tree()}\n\n{message}\n'
+    return data.hash_object(commit.encode(),'commit')
 def is_ignored (path):
     return data.GIT_DIR in path.split('/') or '.git' in path.split('/')
