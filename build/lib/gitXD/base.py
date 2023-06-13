@@ -21,5 +21,33 @@ def write_tree(directory ='.'):
     print('string is tree and it is:')
     print(tree)
     return data.hash_object(tree.encode(),'tree' )
+
+def _iter_tree_entries (oid):
+    if not oid:
+        return 
+    tree = data.get_object(oid, 'tree')
+    for entry in tree.decode().splitlines():
+        type_, oid, name = entry.split(' ',2)
+        yield type_, oid, name
+def get_tree(oid, base_path=''):
+    result = {}
+    for type_, oid, name in _iter_tree_entries(oid):
+        assert '/' not in name
+        assert name not in ('..','.')
+        path = base_path + name
+        if type_ == 'blob':
+            result[path] = oid
+        elif type  == 'tree':
+            result.update(get_tree(oid, f'{path}/'))
+        else:
+            assert False, f'Unknown tree entry {type_}'
+    print(result.items())
+    return result
+def reed_tree(tree_oid):
+    for path, oid in get_tree(tree_oid,'./').items():
+        os.makedirs (os.path.dirname(path),exist_ok=True)
+        with open (path,'wb') as f:
+            f.write(data.get_object(oid))
+            
 def is_ignored (path):
     return data.GIT_DIR in path.split('/') or '.git' in path.split('/')
