@@ -37,11 +37,11 @@ def get_tree(oid, base_path=''):
         path = base_path + name
         if type_ == 'blob':
             result[path] = oid
-        elif type  == 'tree':
+        elif type_  == 'tree':
             result.update(get_tree(oid, f'{path}/'))
         else:
             assert False, f'Unknown tree entry {type_}'
-    print(result.items())
+
     return result
 def reed_tree(tree_oid):
     for path, oid in get_tree(tree_oid,'./').items():
