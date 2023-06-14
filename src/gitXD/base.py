@@ -60,8 +60,11 @@ def reed_tree(tree_oid):
         with open (path,'wb') as f:
             f.write(data.get_object(oid))
 def commit(message):
-    commit = f'tree {write_tree()}\n\n'
-    commit += f'{message}\n'
+    commit = f'tree {write_tree()}\n'
+    HEAD = data.get_HEAD()
+    if HEAD:
+        commit += f'parent {HEAD}\n'
+    commit += f'\n{message}\n'
     oid = data.hash_object(commit.encode(), commit)
     data.set_HEAD(oid)
     return

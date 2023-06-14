@@ -38,8 +38,6 @@ def parse_args():
 
 def read_tree(args):
     base.reed_tree(args.tree)
-def commit(args):
-    print(base.commit(args.message))
     
 def write_tree(args):
     print(base.write_tree())
@@ -52,6 +50,9 @@ def cat_file(args):
     sys.stdout.flush()
     sys.stdout.buffer.write (data.get_object (args.object, expected=None))
 
+def commit(args):
+    # print(base.commit(args.message))
+    print(data.get_HEAD())
 def init (args):
     data.init()
     print (f'Initialized empty gitXD repository in {os.getcwd()}/{data.GIT_DIR}')
