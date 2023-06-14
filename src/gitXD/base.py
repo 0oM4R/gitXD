@@ -65,8 +65,9 @@ def commit(message):
     if HEAD:
         commit += f'parent {HEAD}\n'
     commit += f'\n{message}\n'
-    oid = data.hash_object(commit.encode(), commit)
+    oid = data.hash_object(commit.encode(), message)
     data.set_HEAD(oid)
-    return
+    return oid
+
 def is_ignored (path):
     return data.GIT_DIR in path.split('/') or '.git' in path.split('/')
