@@ -36,10 +36,14 @@ def parse_args():
     log_parser.set_defaults (func = log)
     log_parser.add_argument('oid', nargs='?') # number of args, ? means optional if not specified set to default or None
 
+    checkout_parser = commands.add_parser('checkout')
+    checkout_parser.set_defaults (func = checkout)
+    checkout_parser.add_argument ('oid')
+
     return parser.parse_args ()
 
 def read_tree(args):
-    base.reed_tree(args.tree)
+    base.read_tree(args.tree)
     
 def write_tree(args):
     print(base.write_tree())
@@ -64,6 +68,9 @@ def log(args):
         print('')
 
         oid = commit.parent
+def checkout(args):
+    base.checkout(args.oid)
+
 def init (args):
     data.init()
     print (f'Initialized empty gitXD repository in {os.getcwd()}/{data.GIT_DIR}')

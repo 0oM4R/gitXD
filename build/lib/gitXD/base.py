@@ -82,7 +82,7 @@ def get_commit(oid):
         elif key == 'tree':
             tree = value
         else:
-            assert False, f'Unknown key {key}'
+            assert False, f'Unknown key {key}\n{oid}'
     message = '\n'.join(lines)
     return Commit(tree,parent,message)
 def is_ignored (path):

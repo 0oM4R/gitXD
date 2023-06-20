@@ -28,6 +28,6 @@ def get_object(oid, expected='blob'):
     type_ = type_.decode()
 
     if expected is not None:
-        assert type_ == expected, f'Expected {expected} but got {type_}'
+        assert type_ == expected, f'Expected {expected} but got {type_}\n{oid}'
     return content
 
