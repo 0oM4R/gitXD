@@ -77,7 +77,7 @@ def checkout(args):
 
 def tag(args):
     oid = args.oid or data.get_ref('HEAD')
-    base.tag(args.name,oid)
+    base.create_tag(args.name,oid)
 
 
 def init (args):

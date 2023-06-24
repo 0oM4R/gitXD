@@ -54,7 +54,7 @@ def _empty_current_directory():
                 os.rmdir(path)
             except (FileNotFoundError, OSError):
                 pass
-def reed_tree(tree_oid):
+def read_tree(tree_oid):
     _empty_current_directory()
     for path, oid in get_tree(tree_oid,'./').items():
         os.makedirs (os.path.dirname(path),exist_ok=True)
@@ -62,13 +62,20 @@ def reed_tree(tree_oid):
             f.write(data.get_object(oid))
 def commit(message):
     commit = f'tree {write_tree()}\n'
-    HEAD = data.get_HEAD()
+    HEAD = data.get_ref('HEAD')
     if HEAD:
         commit += f'parent {HEAD}\n'
     commit += f'\n{message}\n'
     oid = data.hash_object(commit.encode(), 'commit')
-    data.set_HEAD(oid)
+    data.update_ref('HEAD',oid)
     return oid
+def checkout(oid):
+    commit = get_commit(oid)
+    read_tree(commit.tree)
+    data.update_ref('HEAD',oid)
+    
+def create_tag(name,oid):
+    data.update_ref(f'refs/tags/{name}',oid)
 
 Commit = namedtuple ('Commit', ['tree', 'parent', 'message'])
 def get_commit(oid):
@@ -82,7 +89,7 @@ def get_commit(oid):
         elif key == 'tree':
             tree = value
         else:
-            assert False, f'Unknown key {key}\n{oid}'
+            assert False, f'Unknown key {key}'
     message = '\n'.join(lines)
     return Commit(tree,parent,message)
 def is_ignored (path):
