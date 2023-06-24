@@ -92,5 +92,8 @@ def get_commit(oid):
             assert False, f'Unknown key {key}'
     message = '\n'.join(lines)
     return Commit(tree,parent,message)
+def get_oid(name):
+    return data.get_ref (name) or name 
+
 def is_ignored (path):
     return data.GIT_DIR in path.split('/') or '.git' in path.split('/')
