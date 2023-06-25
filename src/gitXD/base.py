@@ -93,6 +93,8 @@ def get_commit(oid):
     message = '\n'.join(lines)
     return Commit(tree,parent,message)
 def get_oid(name):
+    if name == '@': name = 'HEAD'
+    
     # name is ref
     refs_to_check = [
         f'{name}',

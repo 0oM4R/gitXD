@@ -35,7 +35,7 @@ def parse_args():
 
     log_parser = commands.add_parser('log')
     log_parser.set_defaults (func = log)
-    log_parser.add_argument('oid', type=oid, nargs='?') # number of args, ? means optional if not specified set to default or None
+    log_parser.add_argument('oid', default='@', type=oid, nargs='?') # number of args, ? means optional if not specified set to default or None
 
     checkout_parser = commands.add_parser('checkout')
     checkout_parser.set_defaults (func = checkout)
@@ -44,7 +44,11 @@ def parse_args():
     tag_parser = commands.add_parser('tag')
     tag_parser.set_defaults (func = tag)
     tag_parser.add_argument ('name')
-    tag_parser.add_argument ('oid',type=oid, nargs='?')
+    tag_parser.add_argument ('oid', default='@',type=oid, nargs='?')
+
+    k_parser = commands.add_parser('k')
+    k_parser.set_defaults (func = k)
+
     return parser.parse_args ()
 
 def read_tree(args):
@@ -65,7 +69,7 @@ def commit(args):
     print(base.commit(args.message))
 
 def log(args):
-    oid = args.oid or data.get_ref('HEAD')
+    oid = args.oid
     while oid:
         commit = base.get_commit(oid)
         print(f'commit {oid}\n')
@@ -77,10 +81,15 @@ def checkout(args):
     base.checkout(args.oid)
 
 def tag(args):
-    oid = args.oid or data.get_ref('HEAD')
+    oid = args.oid
     base.create_tag(args.name,oid)
 
 
+def k(args):
+    for refname ref in data.iter_refs():
+        print(refname, ref)
+    
+    
 def init (args):
     data.init()
     print (f'Initialized empty gitXD repository in {os.getcwd()}/{data.GIT_DIR}')
