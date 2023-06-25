@@ -86,10 +86,10 @@ def tag(args):
 
 
 def k(args):
-    for refname ref in data.iter_refs():
+    for refname, ref in data.iter_refs():
         print(refname, ref)
     
-    
+
 def init (args):
     data.init()
     print (f'Initialized empty gitXD repository in {os.getcwd()}/{data.GIT_DIR}')
