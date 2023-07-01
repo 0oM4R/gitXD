@@ -92,9 +92,24 @@ def get_commit(oid):
             assert False, f'Unknown key {key}'
     message = '\n'.join(lines)
     return Commit(tree,parent,message)
+
+def iter_commits_and_parents(oids):
+    oids = set(oids)
+    visited = set()
+    while oids:
+        oid= oids.pop()
+        if not oid or oid in visited:
+            continue
+        visited.add(oid)
+        yield oid
+
+        commit = get_commit(oid)
+        oids.add(commit.parent)
+        
+
 def get_oid(name):
     if name == '@': name = 'HEAD'
-    
+
     # name is ref
     refs_to_check = [
         f'{name}',

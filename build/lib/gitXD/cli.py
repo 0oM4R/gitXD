@@ -1,4 +1,4 @@
-import argparse, os, sys, textwrap
+import argparse, os, sys, textwrap, subprocess
 from . import data, base
 
 def main():
@@ -86,9 +86,22 @@ def tag(args):
 
 
 def k(args):
+    dot = 'digraph commits {\n'
+
+    oids = set()
     for refname, ref in data.iter_refs():
-        print(refname, ref)
-    
+        dot += f'"{refname}" [shape=note]\n'
+        dot += f'"{refname}" -> "{ref}"\n'    
+        oids.add(ref)
+
+    for oid in base.iter_commits_and_parents(oids):
+        commit = base.get_commit(oid)
+        dot += f'"{oid}" [shape=box style=filled label="{oid[:10]}"]\n'
+        if commit.parent:
+            dot += f'"{oid}" -> "{commit.parent}"\n'
+    dot += '}'
+    print(dot)
+
 
 def init (args):
     data.init()
