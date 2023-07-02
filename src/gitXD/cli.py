@@ -1,4 +1,6 @@
 import argparse, os, sys, textwrap
+import tempfile
+import subprocess
 from . import data, base
 
 def main():
@@ -101,6 +103,18 @@ def k(args):
             dot += f'"{oid}" -> "{commit.parent}"\n'
     dot += '}'
     print(dot)
+
+    dot_encoded = dot.encode()
+    with tempfile.NamedTemporaryFile(suffix='.svg', delete=False) as temp_file:
+        temp_filename = temp_file.name
+        temp_file.write(dot_encoded)
+
+    try:
+        subprocess.run(['display', temp_filename])
+    except FileNotFoundError:
+        print("Error: The 'display' command is not found.")
+    finally:
+        os.remove(temp_filename)
 
 
 def init (args):

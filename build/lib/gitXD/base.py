@@ -109,7 +109,7 @@ def iter_commits_and_parents(oids):
 
 def get_oid(name):
     if name == '@': name = 'HEAD'
-
+    
     # name is ref
     refs_to_check = [
         f'{name}',
